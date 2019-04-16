@@ -28,7 +28,7 @@ class JWKaas:
 
     def __get_pubkeys_from_file(self, jwks_file):
         file = open(jwks_file, 'r')
-        return self.__get_pupkeys_from_json(json.loads(file.read()))
+        return self.__get_pubkeys_from_json(json.loads(file.read()))
 
     def __get_pubkeys_from_url(self, jwks_url):
         pubkeys_json = requests.get(self.jwks_url).json()
@@ -50,7 +50,12 @@ class JWKaas:
         return None
 
     def get_token_info(self, token):
-        headers = jwt.get_unverified_header(token)
+        try:
+            headers = jwt.get_unverified_header(token)
+        except jwt.PyJWTError:
+            logging.warning("Token header decode error")
+            return None
+
         logging.debug("Token headers [%s]", headers)
 
         if not 'kid' in headers:
@@ -76,6 +81,10 @@ class JWKaas:
             logging.warning("Token issuer is invalid, expected [%s]", self.expected_issuer)
         except jwt.InvalidIssuedAtError:
             logging.warning("Token has invalid issued at time")
+        except jwt.InvalidTokenError:
+            logging.warning("Token decode error")
+        except jwt.DecodeError:
+            logging.warning("Invalid token error")
         return None
 
     # Connexion expects scope key in returned dictionary, JWT specs
