@@ -9,7 +9,7 @@ setuptools.setup(
      scripts=[],
      author="Bernie van Veen",
      author_email="b.vanveen@vwt.digital",
-     description="JSON Web Key Advanced Archiving Store",
+     description="JSON Web Key Advanced Acquiring Store",
      long_description=long_description,
      long_description_content_type="text/markdown",
      url="https://github.com/vwt-digital/jwkaas",
