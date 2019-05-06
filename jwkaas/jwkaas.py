@@ -81,16 +81,20 @@ class JWKaas:
             logging.warning("Token issuer is invalid, expected [%s]", self.expected_issuer)
         except jwt.InvalidIssuedAtError:
             logging.warning("Token has invalid issued at time")
-        except jwt.InvalidTokenError:
-            logging.warning("Token decode error")
         except jwt.DecodeError:
+            logging.warning("Token decode error")
+        except jwt.InvalidTokenError:
             logging.warning("Invalid token error")
         return None
 
-    # Connexion expects scope key in returned dictionary, JWT specs
+    # Connexion expects scope/scopes key in returned dictionary, JWT specs
     def get_connexion_token_info(self, token):
         token_info = self.get_token_info(token)
-        if token_info is not None and 'scope' not in token_info and 'scopes' not in token_info and 'scp' in token_info:
+        # do not replace scope/scopes key(s) if already present
+        if token_info and 'scope' not in token_info and 'scopes' not in token_info and 'scp' in token_info:
             # Azure AD returns scope in scp
-            token_info['scope'] = token_info['scp']
+            token_info['scopes'] = [token_info['scp']]
+            # Add roles to scopes collection
+            if 'roles' in token_info:
+                token_info['scopes'] += token_info['roles']
         return token_info
