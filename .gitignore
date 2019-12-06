@@ -1,6 +1,23 @@
 venv/
 .idea/
+.tox/
 dist/
 build/
 __pycache__/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+.hypothesis/
+venv/
+.python-version
 *.egg-info/
+cov-nosetests-html/
+cov-*.xml
+test-*.xml

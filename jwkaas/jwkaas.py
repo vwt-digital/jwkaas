@@ -9,6 +9,7 @@ from .algorithms import RSAAlgorithm
 
 class JWKaas:
     JWK_REFRESH_TIME = datetime.timedelta(hours=24)
+    JWK_ALLOWED_ALGORITHMS = ['RS256', 'RS384', 'RS512']
 
     def __init__(self, expected_audience, expected_issuer, jwks_url=None, jwks_file=None):
         self.expected_audience = expected_audience
@@ -58,7 +59,7 @@ class JWKaas:
 
         logging.debug("Token headers [%s]", headers)
 
-        if not 'kid' in headers:
+        if 'kid' not in headers:
             logging.warning("Received token but no kid specified")
             return None
 
@@ -68,7 +69,8 @@ class JWKaas:
             return None
 
         try:
-            info = jwt.decode(token, pubkey, audience=self.expected_audience, issuer=self.expected_issuer)
+            info = jwt.decode(token, pubkey, audience=self.expected_audience, issuer=self.expected_issuer,
+                              algorithms=JWKaas.JWK_ALLOWED_ALGORITHMS)
             logging.debug("Validated token info [%s]", info)
             return info
         except ValueError:
@@ -81,6 +83,8 @@ class JWKaas:
             logging.warning("Token issuer is invalid, expected [%s]", self.expected_issuer)
         except jwt.InvalidIssuedAtError:
             logging.warning("Token has invalid issued at time")
+        except jwt.InvalidAlgorithmError:
+            logging.warning(f"Token algorithm is incorrect, expected one of [{JWKaas.JWK_ALLOWED_ALGORITHMS}]")
         except jwt.DecodeError:
             logging.warning("Token decode error")
         except jwt.InvalidTokenError:
