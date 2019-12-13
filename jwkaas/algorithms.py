@@ -11,8 +11,10 @@ from .utils import (
     to_base64url_uint
 )
 
+
 class InvalidKeyError(PyJWTError):
     pass
+
 
 try:
     from cryptography.hazmat.primitives import hashes
