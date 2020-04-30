@@ -84,7 +84,7 @@ class JWKaas:
         except jwt.InvalidIssuedAtError:
             logging.warning("Token has invalid issued at time")
         except jwt.InvalidAlgorithmError:
-            logging.warning(f"Token algorithm is incorrect, expected one of [{JWKaas.JWK_ALLOWED_ALGORITHMS}]")
+            logging.warning("Token algorithm is incorrect, expected one of [{JWKaas.JWK_ALLOWED_ALGORITHMS}]")
         except jwt.DecodeError:
             logging.warning("Token decode error")
         except jwt.InvalidTokenError:
