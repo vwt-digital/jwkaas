@@ -144,7 +144,22 @@ class TestJWKaas(unittest.TestCase):
         logging.info('Token info: {}'.format(info))
         self.assertEqual(info, None, "Tampered token should not be decoded")
 
-    def test_connexion_decode_valid_token(self):
+    def test_connexion_decode_valid_token_with_scp(self):
+        token_body = {
+            'iss': 'expected_issuer',
+            'aud': 'expected_audience',
+            'exp': int(time())+100,
+            'nbf': int(time())-10,
+            'scp': 'scope'
+        }
+        token = jwt.encode(token_body, self.private_key, algorithm='RS256', headers={'kid': 'test-key'})
+        info = self.my_jwkaas.get_connexion_token_info(token)
+        logging.info('Token info: {}'.format(info))
+        expected_token_body = token_body.copy()
+        expected_token_body['scopes'] = [token_body['scp']]
+        self.assertEqual(info, expected_token_body)
+
+    def test_connexion_decode_valid_token_with_scp_and_roles(self):
         token_body = {
             'iss': 'expected_issuer',
             'aud': 'expected_audience',
@@ -158,6 +173,34 @@ class TestJWKaas(unittest.TestCase):
         logging.info('Token info: {}'.format(info))
         expected_token_body = token_body.copy()
         expected_token_body['scopes'] = [token_body['scp'], *token_body['roles']]
+        self.assertEqual(info, expected_token_body)
+
+    def test_connexion_decode_invalid_token_with_scp_and_roles(self):
+        token_body = {
+            'iss': 'expected_issuer',
+            'aud': 'expected_audience',
+            'exp': int(time())-10,
+            'nbf': int(time())-20,
+            'scp': 'scope',
+            'roles': ['role1', 'role2']
+        }
+        token = jwt.encode(token_body, self.private_key, algorithm='RS256', headers={'kid': 'test-key'})
+        info = self.my_jwkaas.get_connexion_token_info(token)
+        self.assertEqual(info, None, "Invalid token should not be decoded by connexion_decode")
+
+    def test_connexion_decode_valid_token_only_roles(self):
+        token_body = {
+            'iss': 'expected_issuer',
+            'aud': 'expected_audience',
+            'exp': int(time())+100,
+            'nbf': int(time())-10,
+            'roles': ['role1', 'role2']
+        }
+        token = jwt.encode(token_body, self.private_key, algorithm='RS256', headers={'kid': 'test-key'})
+        info = self.my_jwkaas.get_connexion_token_info(token)
+        logging.info('Token info: {}'.format(info))
+        expected_token_body = token_body.copy()
+        expected_token_body['scopes'] = token_body['roles']
         self.assertEqual(info, expected_token_body)
 
 

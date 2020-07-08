@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
      name='jwkaas',  
-     version='0.4',
+     version='0.6',
      scripts=[],
      author="Bernie van Veen",
      author_email="b.vanveen@vwt.digital",
@@ -16,7 +16,7 @@ setuptools.setup(
      packages=setuptools.find_packages(),
      install_requires= [
          'pyjwt==1.7.1',
-         'cryptography==2.8'
+         'cryptography==2.9.2'
      ],
      classifiers=[
          "Programming Language :: Python :: 3",
