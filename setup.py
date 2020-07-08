@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
      name='jwkaas',  
-     version='0.5',
+     version='0.6',
      scripts=[],
      author="Bernie van Veen",
      author_email="b.vanveen@vwt.digital",
