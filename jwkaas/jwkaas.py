@@ -99,7 +99,7 @@ class JWKaas:
             # Azure AD returns scope in scp
             token_info['scopes'] = [token_info['scp']]
         # Add roles to scopes collection
-        if 'roles' in token_info:
+        if token_info and 'roles' in token_info:
             if not token_info.get('scopes'):
                 token_info['scopes'] = []
             token_info['scopes'] += token_info['roles']
