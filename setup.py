@@ -16,7 +16,7 @@ setuptools.setup(
      packages=setuptools.find_packages(),
      install_requires= [
          'pyjwt==1.7.1',
-         'cryptography==2.9.2'
+         'cryptography==3.2'
      ],
      classifiers=[
          "Programming Language :: Python :: 3",
