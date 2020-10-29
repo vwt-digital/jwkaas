@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-     name='jwkaas',  
-     version='0.6',
+     name='jwkaas',
+     version='0.7',
      scripts=[],
      author="Bernie van Veen",
      author_email="b.vanveen@vwt.digital",
@@ -14,9 +14,9 @@ setuptools.setup(
      long_description_content_type="text/markdown",
      url="https://github.com/vwt-digital/jwkaas",
      packages=setuptools.find_packages(),
-     install_requires= [
+     install_requires=[
          'pyjwt==1.7.1',
-         'cryptography==2.9.2'
+         'cryptography==3.2'
      ],
      classifiers=[
          "Programming Language :: Python :: 3",
