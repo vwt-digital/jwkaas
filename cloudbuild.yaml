@@ -11,7 +11,7 @@ steps:
       - -c
       - |
         export TAG_NAME="$TAG_NAME"
-        python setup.py sdist bdist_wheel
+        python3 setup.py sdist bdist_wheel
 
   # Test build output
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
