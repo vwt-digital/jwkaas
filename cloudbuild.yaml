@@ -34,5 +34,6 @@ steps:
             PASSWORD=$(gcloud secrets versions access latest --secret="$PROJECT_ID"-password)
             REPO=$(gcloud secrets versions access latest --secret="$PROJECT_ID"-repo)
 
+            pip3 install twine
             twine upload -r "$$REPO" dist/* -u "$$USERNAME" -p "$$PASSWORD"
         fi
