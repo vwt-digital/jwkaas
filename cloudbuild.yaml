@@ -19,6 +19,7 @@ steps:
     args:
       - -c
       - |
+        pip3 install twine
         twine check dist/*
 
   # Publish package when tagged
