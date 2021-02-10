@@ -1,0 +1,37 @@
+---
+timeout: 1800s
+options:
+  substitution_option: 'ALLOW_LOOSE'
+
+steps:
+  # Build package
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        export TAG_NAME="$TAG_NAME"
+        python setup.py sdist bdist_wheel
+
+  # Test build output
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        twine check dist/*
+
+  # Publish package when tagged
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        if [[ -n "$TAG_NAME" ]]
+        then
+            USERNAME=$(gcloud secrets versions access latest --secret="$PROJECT_ID"-username)
+            PASSWORD=$(gcloud secrets versions access latest --secret="$PROJECT_ID"-password)
+            REPO=$(gcloud secrets versions access latest --secret="$PROJECT_ID"-repo)
+
+            twine upload -r "$$REPO" dist/* -u "$$USERNAME" -p "$$PASSWORD"
+        fi
