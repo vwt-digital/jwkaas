@@ -1,7 +1,5 @@
 ---
 timeout: 1800s
-options:
-  substitution_option: 'ALLOW_LOOSE'
 
 steps:
   # Build package
