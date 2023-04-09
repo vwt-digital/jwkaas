@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/vwt-digital/jwkaas/badge)](https://www.codefactor.io/repository/github/vwt-digital/jwkaas)
+
 # jwkaas
 Python JSON Web Key Advanced Acquiring Store
 
@@ -31,3 +33,7 @@ JWKaas also provides JWKaas.get_connexion_token_info. This returns the token_inf
 
 ## Acknowledgements
 jwkaas is build around [PyJWT](https://github.com/jpadilla/pyjwt), a Python implementation of [RFC 7519](https://tools.ietf.org/html/rfc7519).
+
+## Testing
+Run ```python -m nose
+
